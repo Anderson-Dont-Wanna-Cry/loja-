@@ -1,0 +1,640 @@
+
+QUERY INSERT PEDIDOS
+     $query  = "INSERT INTO ".$this->prefix."pedidos ";   
+     $query .= "(ped_data, ped_hora, ped_cliente, ped_cod, ped_ref, ped_frete_valor, ped_frete_tipo)"; 
+     $query .= " VALUES ";
+     $query .= "(:data, :hora, :cliente, :cod, :ref, :frete_valor, :frete_tipo)";
+
+
+
+
+            ':data' => Sistema::DataAtualUS(),
+            ':hora' => Sistema::HoraAtual(),
+            ':cliente'=> (int)$cliente,
+            ':cod' => $cod,
+            ':ref' => $ref,
+            ':frete_valor'=>$freteValor,
+            ':frete_tipo' =>$freteTipo    
+
+
+
+
+
+
+GRAVAR ITENS DO PEDIDO
+ $query  = "INSERT INTO ".$this->prefix."pedidos_itens ";
+        $query .= "(item_produto, item_valor, item_qtd, item_ped_cod)";
+        $query .= "VALUES  (:produto,:valor,:qtd,:cod)";
+                
+                $params = array(
+                ':produto' => $item['pro_id'],
+                ':valor'   => $item['pro_valor_us'],
+                ':qtd'     => (int)$item['pro_qtd'],
+                ':cod'     =>  $codpedido  
+                );
+
+
+
+
+
+CLASS LOGIN
+
+$_SESSION['CLI']['cli_nome']      =  $lista['cli_nome'];
+             $_SESSION['CLI']['cli_sobrenome'] =  $lista['cli_sobrenome'];
+             $_SESSION['CLI']['cli_endereco']  =  $lista['cli_endereco'];
+             $_SESSION['CLI']['cli_numero']    =  $lista['cli_numero'];
+             $_SESSION['CLI']['cli_bairro']    =  $lista['cli_bairro'];
+             $_SESSION['CLI']['cli_cidade']    =  $lista['cli_cidade'];
+             $_SESSION['CLI']['cli_uf']        =  $lista['cli_uf'];
+             $_SESSION['CLI']['cli_cpf']       =  $lista['cli_cpf'];
+             $_SESSION['CLI']['cli_cep']       =  $lista['cli_cep'];
+             $_SESSION['CLI']['cli_rg']        =  $lista['cli_rg'];
+             $_SESSION['CLI']['cli_ddd']       =  $lista['cli_ddd'];
+             $_SESSION['CLI']['cli_fone']      =  $lista['cli_fone'];
+             $_SESSION['CLI']['cli_email']     =  $lista['cli_email'];
+             $_SESSION['CLI']['cli_celular']   =  $lista['cli_celular'];
+             $_SESSION['CLI']['cli_data_nasc'] =  $lista['cli_data_nasc'];
+             $_SESSION['CLI']['cli_hora_cad']  =  $lista['cli_hora_cad'];
+             $_SESSION['CLI']['cli_data_cad']  =  $lista['cli_data_cad'];
+             $_SESSION['CLI']['cli_pass']      =  $lista['cli_pass']; 
+
+
+
+
+
+
+
+
+    //PAGINA DE LOGIN
+    <section class="row" id="fazerlogin">
+
+    <form name="cliente_login" method="post" action="" >
+    
+        <div class="col-md-4 text-center">
+        
+      Não tem cadastro?   <a href="" class=""><i class="glyphicon glyphicon-pencil"></i> Me Cadastrar</a>
+          
+        
+      Esqueceu a senha?   <a href="" class=" "><i class="glyphicon glyphicon-question-sign"></i> Esqueci a Senha</a>
+           
+                
+          
+        
+        </div>
+     
+        <!---  aqui estão os campos -->
+        <div class="col-md-4">
+
+     
+            <div class="form-group"> 
+                <label></i> Email: </label>
+                <input type="email"  class="form-control " name="txt_email" value="" placeholder="Digite seu email" required autocomplete="off">        
+
+            </div>
+
+
+            <div class="form-group"> 
+                 <label> Senha: </label>
+                 <input type="password"  class="form-control " name="txt_senha" value="" placeholder="Digite sua senha" required>        
+           
+            </div>
+
+
+            <div class="form-group"> 
+                
+                <button class="btn btn-geral btn-block btn-lg"><i class="glyphicon glyphicon-log-in"></i> Entrar </button>
+          
+                
+                
+                
+            </div>
+            <div class="form-group"> 
+                
+                <a href="" class="btn btn-default "><i class="glyphicon glyphicon-pencil"></i> Me Cadastrar</a>
+             
+                
+                <a href="" class="btn btn-default "><i class="glyphicon glyphicon-question-sign"></i> Esqueci a Senha</a>
+           
+                
+                
+            </div>
+
+            
+        </div><!-- fim dos campos --->
+
+
+        <div class="col-md-4 text-center"> 
+        
+      
+        </div>
+    
+    </form>
+    
+    
+</section>
+
+
+
+
+
+// HTML CONTA DO CLIENTE
+
+<h4 class="text-center text-danger"> Olá <b>{$USER}</b>, seja bem vindo! O que deseja fazer agora?</h4> 
+<section class="row">
+    
+    <div class="text-center">
+        
+        <a href="" class="btn btn-success"><i class="glyphicon glyphicon-home"></i> Minha Conta</a>
+        
+        <a href="" class="btn btn-success"><i class="glyphicon glyphicon-barcode"></i> Pedidos</a>
+        
+        <a href="" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i> Meus Dados </a>
+        <a href="" class="btn btn-success"><i class="glyphicon glyphicon-shopping-cart"></i> Carrinho </a>
+        <a href="" class="btn btn-warning"> Alterar Senha </a>
+        <a href="" class="btn btn-danger"><i class="glyphicon glyphicon-log-out"></i> Sair </a>
+     
+        
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</section>
+
+
+
+
+
+
+//POR ABAIXO DA LOGO NA INDEX TPL
+<div class="col-md-6 text-right">
+                        
+                                 {if $LOGADO == true}
+                                  Olá: {$USER} <a href="{$PAG_LOGOFF}" class="btn btn-geral"><i class="glyphicon glyphicon-log-out"></i> Sair </a> 
+                                 {/if}
+                    
+                    </div>
+
+
+
+
+
+
+
+// FUNCAO MENU DO CLIENTE
+
+ static function MenuCliente(){
+        
+     // verifo se não esta logado 
+            if(!self::Logado()):
+
+                self::AcessoNegado();
+                Rotas::Redirecionar(2, Rotas::pag_ClienteLogin());
+                              
+                // caso nao redirecione  saiu  do bloco
+                exit();
+                            
+            // caso esteja mostra a tela minha conta 
+            else:
+                
+        $smarty = new Template();
+        
+        $smarty->assign('PAG_CONTA', Rotas::pag_ClienteConta());
+        $smarty->assign('PAG_CARRINHO', Rotas::pag_Carrinho());
+        $smarty->assign('PAG_LOGOFF', Rotas::pag_Logoff());
+        $smarty->assign('PAG_CLIENTE_PEDIDOS', Rotas::pag_CLientePedidos());
+        $smarty->assign('PAG_CLIENTE_DADOS', Rotas::pag_CLienteDados());
+        $smarty->assign('PAG_CLIENTE_SENHA', Rotas::pag_CLienteSenha());
+        $smarty->assign('USER', $_SESSION['CLI']['cli_nome']);
+        
+        $smarty->display('menu_cliente.tpl');
+        
+              endif;
+    }
+
+
+
+
+
+
+
+
+
+    GET LISTA DO CLIENTE
+
+     private function GetLista(){
+        
+        $i = 1;
+        while ($lista = $this->ListarDados()):
+            
+        $this->itens[$i] = array(
+                'ped_id'    => $lista['ped_id'],
+                'ped_data'  => Sistema::Fdata($lista['ped_data']),
+                'ped_data_us'  => $lista['ped_data'],
+                'ped_hora'   => $lista['ped_hora'],
+                'ped_cliente' => $lista['ped_cliente'],
+                'ped_cod'   => $lista['ped_cod'],
+                'ped_ref'     => $lista['ped_ref'],
+                'ped_pag_status' => $lista['ped_pag_status'],
+                'ped_pag_forma'   => $lista['ped_pag_forma'],
+                'ped_pag_tipo'    => $lista['ped_pag_tipo'],
+                'ped_pag_codigo'   => $lista['ped_pag_codigo'],
+                'ped_frete_valor' => $lista['ped_frete_valor'],
+                'ped_frete_tipo'  => $lista['ped_frete_tipo'],
+                'cli_nome'  => $lista['cli_nome'],
+                'cli_sobrenome'  => $lista['cli_sobrenome'],
+            );
+        
+        
+            $i++;
+        
+        endwhile;
+        
+        
+    }
+
+
+
+
+    PÁGINA DE PEDIDOS
+
+    <h3>Meus Pedidos</h3>
+
+<section class="row" id="pedidos">
+    
+    <h4 class="text-center">Meus Pedidos</h4>
+    
+    <center>
+    <table class="table table-bordered" style="width: 90%">
+        
+        <tr class="text-danger bg-danger">
+            <td>Data</td>
+            <td>Hora</td>
+            <td>Ref</td>
+           
+            <td>Status</td>
+            <td></td>
+        </tr>
+        
+        {foreach from=$PEDIDOS item=P}
+        <tr>
+            
+            <td style="width: 10%">{$P.ped_data}</td>
+            <td style="width: 10%">{$P.ped_hora}</td>
+            <td style="width: 10%">{$P.ped_ref}</td>
+          
+            
+            {if $P.ped_pag_status == 'NAO'} 
+             <td style="width: 15%"><span class="label label-danger">{$P.ped_pag_status}</span></td>
+            {elseif $P.ped_pag_status == 'Pago'}
+              <td style="width: 15%"><span class="label label-success">{$P.ped_pag_status}</span></td>
+            {else}
+              <td style="width: 15%">{$P.ped_pag_status}</td>
+            {/if}
+             
+        <form name="itens" method="post" action="{$PAG_ITENS}">
+            
+             <input type="hidden" name="cod_pedido" id="cod_pedido" value="{$P.ped_cod}">
+             <td style="width: 10%"><button class="btn btn-default"><i class="glyphicon glyphicon-menu-hamburger"></i> Detalhes</button></td>
+       
+        </form>    
+            
+        </tr>
+        {/foreach}
+        
+    </table>
+      </center>
+    
+    
+</section>
+      
+
+
+
+
+
+
+      GET LISTA DOS ITENS PEDIDOS
+
+       private function GetLista(){
+        
+        $i = 1; $sub = 0;
+        while ($lista = $this->ListarDados()):
+            
+        // subtotal de cada item     
+        $sub =   $lista['item_valor'] *  $lista['item_qtd'];
+        $this->total_valor +=  $sub;
+            
+            
+        $this->itens[$i] = array(
+                'ped_id'    => $lista['ped_id'],
+                'ped_data'  => Sistema::Fdata($lista['ped_data']),
+                'ped_data_us'  => $lista['ped_data'],
+                'ped_hora'   => $lista['ped_hora'],
+                'ped_cliente' => $lista['ped_cliente'],
+                'ped_cod'   => $lista['ped_cod'],
+                'ped_ref'     => $lista['ped_ref'],
+                'ped_pag_status' => $lista['ped_pag_status'],
+                'ped_pag_forma'   => $lista['ped_pag_forma'],
+                'ped_pag_tipo'    => $lista['ped_pag_tipo'],
+                'ped_pag_codigo'   => $lista['ped_pag_codigo'],
+                'ped_frete_valor' => $lista['ped_frete_valor'],
+                'ped_frete_tipo'  => $lista['ped_frete_tipo'],
+                'item_id'  => $lista['item_id'],
+                'item_nome'  => $lista['pro_nome'],
+                'item_valor'  => Sistema::MoedaBR($lista['item_valor']),
+                'item_valor_us'  => $lista['item_valor'],
+                'item_qtd'  => $lista['item_qtd'],
+                'item_img'  => Rotas::ImageLink($lista['pro_img'], 60, 60) ,
+                'item_sub'  => Sistema::MoedaBR($sub),
+                'item_sub_us'  => $sub,
+               
+           
+            
+            );
+        
+        
+            $i++;
+        
+        endwhile;
+        
+        
+    }
+
+    }
+
+
+
+
+
+
+    AREA DE FRETE NO CARRINHO
+
+    
+                    <!--  bloco frete -->
+   <section class="row" id="dadosfrete">
+            
+       
+     
+       
+       <div class="col-md-4"></div>
+           
+           
+       <div class="col-md-4">
+           
+           <!-- campos para tratar  do  frete -->
+           <input type="hidden" name="peso_frete" id="peso_frete" value="" class="form-control " readonly>
+           
+           <input type="text" name="cep_frete" class="form-control" id="cep_frete" value="" placeholder="digite seu cep" >
+          
+           
+           <input type="hidden" name="frete_valor" id="frete_valor" value="0">
+           
+           
+       </div> 
+       
+      
+           <div class="col-md-4">
+               <!-- botão frete -->
+               <button class="btn btn-geral btn-block" id="buscar_frete"> <i class="glyphicon glyphicon-send"></i> Calcular Frete </button>
+               
+           </div>          
+                        
+                        
+                        
+  </section>
+
+
+
+
+
+
+
+
+  EMAIL TEMPLATE COMPRA
+
+  <h3> Olá {$NOME_CLIENTE} , obrigado pela sua compra em {$SITE_NOME} <br>
+<a href="{$SITE_HOME}"> {$SITE_HOME} </a>
+</h3>
+
+
+  <section class="row">
+      <h4>
+          Para acessar a sua conta e ter um histórico de seus pedidos acesse nosso site, e sua conta<br>
+          <a  href="{$PAG_MINHA_CONTA}" > Minha conta: {$PAG_MINHA_CONTA} </a>
+      
+      </h4>                 
+                   
+  </section>
+
+
+<section class="row ">
+   
+    <center>
+      
+    <div class="alert alert-success"> Itens do seu pedido </div> 
+    <br>
+        
+    <table class="table table-bordered" style="width: 95%;">
+     
+        
+        {foreach from=$PRO item=P}
+        
+            <tr style="border: 1px solid #b2dba1">
+            
+           <td> <img src="{$P.pro_img}" alt=" {$P.pro_nome} "> </td> 
+            <td>  {$P.pro_nome}  </td>
+            <td>  {$P.pro_valor} </td>
+            <td>  {$P.pro_qtd}   </td>
+            <td>  {$P.pro_subTotal} </td>
+          
+            
+            
+        </tr>
+        
+        {/foreach}
+        
+    </table>
+  
+    </center>
+        
+           
+</section><!-- fim da listagem itens -->
+
+
+   <!-- botoes de baixo e valor total -->
+        <section class="row">
+                      
+            <div class="col-md-4 text-right">
+           
+            </div>
+            <div class="col-md-4 text-right">
+          
+            </div>
+            
+            <!-- botão de limpar-->
+            <div class="col-md-4 text-right  text-danger bg-warning">
+
+               <h4>
+               Total : R$ {$TOTAL}
+               </h4>
+               <h4>
+               Frete : R$ {$FRETE}
+               </h4>
+               <h4>
+               Final : R$ {$TOTAL_FRETE}
+               </h4>
+
+            </div>
+            
+            
+        </section>
+               <br>
+             
+
+
+
+
+
+
+
+
+
+
+
+
+PAGINA EMAIL COMPRA COM CSS
+
+
+<style>
+.tabela {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.tabela th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+.tabela tr:nth-child(odd){
+  background-color: #b2b2b2;
+}
+
+.sessao{
+  
+  padding:20px;
+}
+
+
+.total{
+  text-align:right;
+}
+
+.frete{
+  text-align:right;
+}
+
+.totalfrete{
+  text-align:right;
+  font-size:18px;
+  font-style: bold;
+  color:#062a46;
+}
+
+
+
+
+
+.textoinicio{
+  text-align:center;
+}
+
+.minhaconta{
+  text-align:center;
+}
+
+
+</style>
+
+<p class="textoinicio"> Olá {$NOME_CLIENTE} , obrigado pela sua compra em {$SITE_NOME} <br>
+<a href="{$SITE_HOME}"> {$SITE_HOME} </a>
+</p>
+
+
+  <section class="row">
+      <p class="minhaconta">
+          Para acessar a sua conta e ter um histórico de seus pedidos acesse nosso site, e sua conta<br>
+          <a  href="{$PAG_MINHA_CONTA}" > Minha conta: {$PAG_MINHA_CONTA} </a>
+      
+      </p>                 
+                   
+  </section>
+
+
+<section class="row ">
+   
+    <center>
+      
+     
+   <br>
+        
+    <table class="tabela" style="width: 95%;">
+     
+        <tr style="
+            border: 1px solid #b2dba1; 
+            
+            background-color: #072339;
+            color:#FFF;
+            font-size:18px;" >
+
+          <td colspan="5">Itens do seu pedido </td>
+        </tr>
+        {foreach from=$PRO item=P}
+        
+            <tr style="border: 1px solid #b2dba1">
+            
+           <td> <img src="{$P.pro_img}" alt=" {$P.pro_nome} "> </td> 
+            <td>  {$P.pro_nome}  </td>
+            <td>  {$P.pro_valor} </td>
+            <td>  {$P.pro_qtd}   </td>
+            <td>  {$P.pro_subTotal} </td>
+          
+            
+            
+        </tr>
+        
+        {/foreach}
+        
+    </table>
+  
+    </center>
+        
+           
+</section><!-- fim da listagem itens -->
+
+
+   <!-- botoes de baixo e valor total -->
+        <div class="sessao">
+                      
+            
+
+               <p class="total">
+               <b>Total :</b> R$ {$TOTAL}
+               </p>
+               <p class="frete">
+               <b>Frete</b> : R$ {$FRETE}
+               </p>
+               <p class="totalfrete">
+               <b>Final : R$ {$TOTAL_FRETE}</b>
+               </p>
+
+            
+            
+            
+        </div>
+               <br>
+             
